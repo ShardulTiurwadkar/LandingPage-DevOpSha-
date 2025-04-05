@@ -2,28 +2,25 @@ stages:
   - build
   - deploy
 
-# Define the build job
+# Set environment variables
+variables:
+  NODE_ENV: 'production'
+
+# Build job
 build:
-  image: node:18
+  image: node:23   # Use Node.js 23.x Docker image
   stage: build
   script:
-    - git clone https://github.com/ShardulTiurwadkar/LandingPage-DevOpSha-.git # Clone the GitHub repo
-    - cd LandingPage-DevOpSha-                            # Navigate into the project directory
-    - npm install                                         # Install dependencies
-    - npm run grunt                                       # Run Grunt build task
+    - npm install                 # Install dependencies
+    - npm run build                # Run TypeScript build (assuming `tsc` or a build script in `package.json`)
 
-# Define the deploy job
+# Deploy job to Vercel
 deploy:
-  image: node:18
+  image: node:23   # Use Node.js 23.x Docker image
   stage: deploy
   script:
-    - cd LandingPage-DevOpSha-                            # Navigate into the project directory
-    - npm install -g vercel                              # Install Vercel CLI globally
-    - vercel login --token $VERCEL_TOKEN                  # Login to Vercel using the token stored in GitLab CI/CD variable
-    - vercel --prod                                       # Deploy to production on Vercel
-
-# Optional: Cache node_modules between builds for faster CI
-cache:
-  paths:
-    - node_modules/
-
+    - npm install -g vercel                # Install Vercel CLI globally
+    - vercel login --token $VERCEL_TOKEN    # Login to Vercel using the token stored in GitLab CI/CD variables
+    - vercel --prod                         # Deploy to the production environment on Vercel
+  only:
+    - main                                     # Deploy only on push to `main` branch
