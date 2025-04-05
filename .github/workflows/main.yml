@@ -1,12 +1,12 @@
-name: CI/CD Pipeline
+name: Build and Deploy to Vercel
 
 on:
   push:
     branches:
-      - main  # Trigger the pipeline when pushing to the `main` branch
+      - main  # Trigger on push to the `main` branch
   pull_request:
     branches:
-      - main  # Trigger the pipeline on pull requests to `main`
+      - main  # Trigger on pull requests to the `main` branch
 
 jobs:
   build:
@@ -14,32 +14,32 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3  # Checkout the repository's code
+        uses: actions/checkout@v3  # Checkout the repository
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3  # Set up Node.js environment
+        uses: actions/setup-node@v3  # Set up Node.js
         with:
           node-version: '23.x'  # Use Node.js version 23.x
 
       - name: Install Dependencies
-        run: npm install  # Install project dependencies
+        run: npm install  # Install the dependencies using npm
 
       - name: Run Build
-        run: npm run build  # Run your build command
+        run: npm run build  # Run the build command
 
   deploy:
     runs-on: ubuntu-latest  # Use an Ubuntu runner for the deploy job
-    needs: build  # Ensure that the deploy job runs only after the build job is successful
+    needs: build  # Make sure the deploy job runs after the build job
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3  # Checkout the repository's code
+        uses: actions/checkout@v3  # Checkout the repository
 
       - name: Install Vercel CLI
-        run: npm install -g vercel  # Install the Vercel CLI
+        run: npm install -g vercel  # Install the Vercel CLI globally
 
       - name: Vercel Login
-        run: vercel login --token ${{ secrets.VERCEL_TOKEN }}  # Use GitHub secrets for the Vercel token
+        run: vercel login --token ${{ secrets.VERCEL_TOKEN }}  # Use the Vercel token from GitHub Secrets
 
       - name: Deploy to Vercel
-        run: vercel --prod  # Deploy to Vercel
+        run: vercel --prod  # Deploy to Vercel with the '--prod' flag
