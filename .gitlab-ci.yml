@@ -1,0 +1,26 @@
+stages:
+  - build
+  - deploy
+
+# Set environment variables
+variables:
+  NODE_ENV: 'production'
+
+# Build job
+build:
+  image: node:23   # Use Node.js 23.x Docker image
+  stage: build
+  script:
+    - npm install                 # Install dependencies
+    - npm run build                # Run TypeScript build (assuming `tsc` or a build script in `package.json`)
+
+# Deploy job to Vercel
+deploy:
+  image: node:23   # Use Node.js 23.x Docker image
+  stage: deploy
+  script:
+    - npm install -g vercel                # Install Vercel CLI globally
+    - vercel login --token $VERCEL_TOKEN    # Login to Vercel using the token stored in GitLab CI/CD variables
+    - vercel --prod                         # Deploy to the production environment on Vercel
+  only:
+    - main                                     # Deploy only on push to `main` branch
