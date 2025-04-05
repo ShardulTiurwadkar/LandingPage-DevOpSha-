@@ -6,6 +6,7 @@ stages:
 variables:
   NODE_ENV: 'production'
 
+
 # Build job
 build:
   image: node:23   # Use Node.js 23.x Docker image
