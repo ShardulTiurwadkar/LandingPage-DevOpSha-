@@ -1,18 +1,15 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",  // Set baseUrl to the root of the project
+    "baseUrl": ".",  // Points to the root of the project
     "paths": {
-      "@/*": ["src/*"]  // This will resolve '@/' to 'src/'
+      "@/*": ["src/*"]  // Resolves '@' to the 'src' folder
     },
-    "strict": true,  // Enable strict type-checking options
-    "esModuleInterop": true,  // Enable compatibility with CommonJS modules
-    "lib": [
-      "dom",
-      "es2015"
-    ],
-    "jsx": "react-jsx"  // Use the new JSX transform with React 17+
+    "strict": true,  // Enables strict type checking
+    "esModuleInterop": true,  // Enables compatibility with CommonJS modules
+    "lib": ["dom", "es2015"],  // Standard library settings
+    "jsx": "react-jsx"  // JSX handling for React 17+
   },
   "include": [
-    "src/**/*"  // Include all files under 'src' directory
+    "src/**/*"  // Include all source files under the 'src' directory
   ]
 }
