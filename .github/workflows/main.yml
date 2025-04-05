@@ -1,0 +1,45 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main  # Trigger the pipeline when pushing to the `main` branch
+  pull_request:
+    branches:
+      - main  # Trigger the pipeline on pull requests to `main`
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Use an Ubuntu runner for the build job
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3  # Checkout the repository's code
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3  # Set up Node.js environment
+        with:
+          node-version: '23.x'  # Use Node.js version 23.x
+
+      - name: Install Dependencies
+        run: npm install  # Install project dependencies
+
+      - name: Run Build
+        run: npm run build  # Run your build command
+
+  deploy:
+    runs-on: ubuntu-latest  # Use an Ubuntu runner for the deploy job
+    needs: build  # Ensure that the deploy job runs only after the build job is successful
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3  # Checkout the repository's code
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel  # Install the Vercel CLI
+
+      - name: Vercel Login
+        run: vercel login --token ${{ secrets.VERCEL_TOKEN }}  # Use GitHub secrets for the Vercel token
+
+      - name: Deploy to Vercel
+        run: vercel --prod  # Deploy to Vercel
